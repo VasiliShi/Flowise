@@ -1,30 +1,15 @@
-# Build local monorepo image
-# docker build --no-cache -t  flowise .
-# Run image
-# docker run -d -p 3000:3000 flowise
 FROM node:18-alpine
 
-WORKDIR /usr/src/packages
+USER root
 
-# Copy root package.json and lockfile
-COPY package.json ./
+RUN apk add --no-cache git
+RUN apk add --no-cache python3 py3-pip make g++
 
-# Copy components package.json
-COPY packages/components/package.json ./packages/components/package.json
+# You can install a specific version like: flowise@1.0.0
+RUN npm install -g flowise
 
-# Copy ui package.json
-COPY packages/ui/package.json ./packages/ui/package.json
-
-# Copy server package.json
-COPY packages/server/package.json ./packages/server/package.json
-
-RUN yarn install
-
-# Copy app source
-COPY . .
-
-RUN yarn build
-
+WORKDIR /data
 EXPOSE 3000
+CMD "flowise"
 
-CMD [ "yarn", "start" ]
+
