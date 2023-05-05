@@ -10,6 +10,6 @@ RUN npm install -g flowise
 
 WORKDIR /data
 EXPOSE 3000
-CMD "flowise"
+CMD npx flowise start
 
 
